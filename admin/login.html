@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — SK Interior Design</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="stylesheet" href="admin.css">
+
+</head>
+<body>
+
+    <div class="login-page">
+
+        <div class="login-card">
+
+            <img src="../images/logo.png" alt="SK Interior Design">
+
+            <h1>Admin Login</h1>
+            <p>Sign in to manage your website content.</p>
+
+            <div class="alert error" id="loginAlert"></div>
+
+            <form id="loginForm" novalidate>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" autocomplete="off" autofocus required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                    Sign In
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="admin.js"></script>
+
+</body>
+</html>

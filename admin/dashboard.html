@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — SK Interior Design</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="stylesheet" href="admin.css">
+
+</head>
+<body>
+
+    <div class="toast-stack" id="toastStack"></div>
+
+    <div class="admin-shell">
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="brand">
+                <img src="../images/logo.png" alt="SK Interior Design">
+            </div>
+
+            <nav id="navList">
+                <button class="nav-item active" data-view="dashboard" type="button">Dashboard</button>
+                <button class="nav-item" data-view="home" type="button">Home</button>
+                <button class="nav-item" data-view="projects" type="button">Projects</button>
+                <button class="nav-item" data-view="portfolio" type="button">Portfolio</button>
+                <button class="nav-item" data-view="videos" type="button">Video Gallery</button>
+                <button class="nav-item" data-view="services" type="button">Services</button>
+                <button class="nav-item" data-view="process" type="button">Process</button>
+                <button class="nav-item" data-view="whysk" type="button">Why SK</button>
+                <button class="nav-item" data-view="inquiries" type="button">Inquiries</button>
+                <button class="nav-item" data-view="settings" type="button">Settings</button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="nav-item" id="logoutBtn" type="button">Logout</button>
+            </div>
+
+        </aside>
+
+
+        <!-- ================= MAIN ================= -->
+
+        <main class="main">
+
+            <div class="topbar">
+                <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle menu">☰</button>
+                <h1 id="viewTitle">Dashboard</h1>
+            </div>
+
+            <div class="session-banner" id="sessionBanner">
+                Your session is about to expire. Save any changes soon.
+            </div>
+
+
+            <!-- ============ DASHBOARD ============ -->
+
+            <section class="view active" id="view-dashboard">
+
+                <div class="stat-grid" id="statGrid">
+                    <div class="stat-card"><span>Total Projects</span><strong id="statTotalProjects">—</strong></div>
+                    <div class="stat-card"><span>Residential Projects</span><strong id="statResidentialProjects">—</strong></div>
+                    <div class="stat-card"><span>Commercial Projects</span><strong id="statCommercialProjects">—</strong></div>
+                    <div class="stat-card"><span>Total Services</span><strong id="statTotalServices">—</strong></div>
+                    <div class="stat-card"><span>Total Inquiries</span><strong id="statTotalInquiries">—</strong></div>
+                    <div class="stat-card"><span>Pending Inquiries</span><strong id="statPendingInquiries">—</strong></div>
+                </div>
+
+            </section>
+
+
+            <!-- ============ HOME ============ -->
+
+            <section class="view" id="view-home">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Homepage Image</h2>
+                    </div>
+
+                    <p class="muted" style="margin-bottom:20px;">
+                        This is the main image shown in the homepage hero
+                        section. Upload a new one and save to update it
+                        on the live site immediately.
+                    </p>
+
+                    <div class="field">
+                        <div class="image-grid" id="homepageImagePreview"></div>
+                        <div class="uploader" id="homepageUploader">
+                            Click or drop an image to upload — from your computer or phone
+                            <input type="file" id="homepageFileInput" accept="image/*">
+                        </div>
+                        <div class="upload-progress" id="homepageUploadProgress"></div>
+                    </div>
+
+                    <div class="alert error" id="homeFormAlert"></div>
+
+                    <button class="btn btn-primary" id="saveHomeImageBtn" type="button">Save Homepage Image</button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============ PROJECTS ============ -->
+
+            <section class="view" id="view-projects">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Projects</h2>
+                        <button class="btn btn-primary btn-sm" id="addProjectBtn" type="button">+ Add Project</button>
+                    </div>
+
+                    <div class="toolbar">
+                        <input type="text" id="projectSearch" placeholder="Search title or location…">
+                        <select id="projectCategoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Spaces">Spaces</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cover</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Location</th>
+                                    <th>Order</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projectsTableBody">
+                                <tr class="empty-row"><td colspan="6"><span class="spinner"></span> Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============ PORTFOLIO ============ -->
+
+            <section class="view" id="view-portfolio">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Portfolio Categories</h2>
+                        <button class="btn btn-primary btn-sm" id="addPortfolioCategoryBtn" type="button">+ Add Category</button>
+                    </div>
+
+                    <p class="muted" style="margin-bottom:20px;">
+                        These power the "Portfolio" dropdown in the main
+                        navigation. A category with no parent shows up
+                        top-level; give it a parent to nest it as a
+                        subcategory (one level deep).
+                    </p>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Parent</th>
+                                    <th>Order</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portfolioTableBody">
+                                <tr class="empty-row"><td colspan="4"><span class="spinner"></span> Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============ VIDEO GALLERY ============ -->
+
+            <section class="view" id="view-videos">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Video Gallery</h2>
+                        <button class="btn btn-primary btn-sm" id="addVideoBtn" type="button">+ Add Video</button>
+                    </div>
+
+                    <p class="muted" style="margin-bottom:20px;">
+                        Standalone videos only — separate from individual
+                        project videos. Paste a YouTube URL; invalid or
+                        broken links are skipped safely on the live site.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thumbnail</th>
+                                    <th>Title</th>
+                                    <th>YouTube URL</th>
+                                    <th>Order</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="videosTableBody">
+                                <tr class="empty-row"><td colspan="5"><span class="spinner"></span> Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============ SERVICES ============ -->
+
+            <section class="view" id="view-services">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Services</h2>
+                        <button class="btn btn-primary btn-sm" id="addServiceBtn" type="button">+ Add Service</button>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Icon</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Order</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="servicesTableBody">
+                                <tr class="empty-row"><td colspan="6"><span class="spinner"></span> Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============ PROCESS ============ -->
+
+            <section class="view" id="view-process">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Process</h2>
+                        <button class="btn btn-primary btn-sm" id="addProcessBtn" type="button">+ Add Step</button>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Step</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Order</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="processTableBody">
+                                <tr class="empty-row"><td colspan="6"><span class="spinner"></span> Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============ WHY SK ============ -->
+
+            <section class="view" id="view-whysk">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Why SK</h2>
+                        <button class="btn btn-primary btn-sm" id="addWhySKBtn" type="button">+ Add Item</button>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Order</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="whySKTableBody">
+                                <tr class="empty-row"><td colspan="5"><span class="spinner"></span> Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============ INQUIRIES ============ -->
+
+            <section class="view" id="view-inquiries">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Inquiries</h2>
+                    </div>
+
+                    <div class="toolbar">
+                        <select id="inquiryStatusFilter">
+                            <option value="">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="handled">Handled</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Type</th>
+                                    <th>Location</th>
+                                    <th>Budget</th>
+                                    <th>Message</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inquiriesTableBody">
+                                <tr class="empty-row"><td colspan="10"><span class="spinner"></span> Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============ SETTINGS ============ -->
+
+            <section class="view" id="view-settings">
+
+                <div class="panel">
+                    <div class="panel-header"><h2>Session</h2></div>
+                    <p class="muted">You're signed in. Sessions last up to 6 hours, and refresh automatically while you're active.</p>
+                    <button class="btn btn-danger mt-16" id="settingsLogoutBtn" type="button">Logout</button>
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h2>Site Settings</h2>
+                    </div>
+
+                    <p class="muted" style="margin-bottom:18px;">
+                        General key/value settings, stored in the Settings sheet.
+                        Most day-to-day content is managed from the tabs on the left —
+                        this is only for anything that doesn't fit elsewhere.
+                    </p>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Key</th><th>Value</th></tr></thead>
+                            <tbody id="settingsTableBody">
+                                <tr class="empty-row"><td colspan="2"><span class="spinner"></span> Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="field-row mt-16">
+                        <div class="field"><label for="newSettingKey">New key</label><input type="text" id="newSettingKey"></div>
+                        <div class="field"><label for="newSettingValue">Value</label><input type="text" id="newSettingValue"></div>
+                    </div>
+                    <button class="btn btn-sm" id="addSettingBtn" type="button">+ Add / Update Setting</button>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ================= PROJECT EDITOR MODAL ================= -->
+
+    <div class="modal-overlay" id="projectModalOverlay">
+        <div class="modal-box wide">
+
+            <div class="modal-header">
+                <h2 id="projectModalTitle">Add Project</h2>
+                <button class="modal-close" data-close-modal="projectModalOverlay" type="button">✕</button>
+            </div>
+
+            <div class="alert error" id="projectFormAlert"></div>
+
+            <form id="projectForm" novalidate>
+
+                <input type="hidden" id="projectId">
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="projectTitle">Project Title</label>
+                        <input type="text" id="projectTitle" required>
+                    </div>
+                    <div class="field">
+                        <label for="projectCategory">Category</label>
+                        <select id="projectCategory">
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Spaces">Spaces</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="projectLocation">Location</label>
+                        <input type="text" id="projectLocation">
+                    </div>
+                    <div class="field">
+                        <label for="projectOrder">Display Order</label>
+                        <input type="number" id="projectOrder" value="0">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="projectDescription">Description <span class="muted">(shown on the project's detail view)</span></label>
+                    <textarea id="projectDescription" rows="4" placeholder="A longer description of this project — the story, the brief, the materials used…"></textarea>
+                </div>
+
+                <div class="field">
+                    <label for="projectPortfolioCategory">Portfolio Category <span class="muted">(optional — controls which Portfolio nav filter shows this project)</span></label>
+                    <select id="projectPortfolioCategory">
+                        <option value="">— None —</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="projectVideoUrl">Video URL <span class="muted">(optional — YouTube or Vimeo)</span></label>
+                    <input type="text" id="projectVideoUrl" placeholder="https://youtube.com/watch?v=...">
+                </div>
+
+                <div class="field">
+                    <label>Cover Image</label>
+                    <div class="image-grid" id="coverImagePreview"></div>
+                    <div class="uploader" id="coverUploader">
+                        Click or drop an image to upload cover — from your computer or phone
+                        <input type="file" id="coverFileInput" accept="image/*">
+                    </div>
+                    <div class="upload-progress" id="coverUploadProgress"></div>
+                </div>
+
+                <div class="field">
+                    <label>Gallery Images</label>
+                    <div class="image-grid" id="galleryImagePreview"></div>
+                    <div class="uploader" id="galleryUploader">
+                        Click or drop images to add to the gallery (multiple allowed)
+                        <input type="file" id="galleryFileInput" accept="image/*" multiple>
+                    </div>
+                    <div class="upload-progress" id="galleryUploadProgress"></div>
+                    <p class="hint">Use the ◀ ▶ buttons on each image to reorder the gallery. New projects: save the project first, then add gallery images.</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteProjectBtn" style="display:none;">Delete Project</button>
+                    <span style="flex:1;"></span>
+                    <button type="button" class="btn" data-close-modal="projectModalOverlay">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveProjectBtn">Save Project</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- ================= SERVICE EDITOR MODAL ================= -->
+
+    <div class="modal-overlay" id="serviceModalOverlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 id="serviceModalTitle">Add Service</h2>
+                <button class="modal-close" data-close-modal="serviceModalOverlay" type="button">✕</button>
+            </div>
+
+            <div class="alert error" id="serviceFormAlert"></div>
+
+            <form id="serviceForm" novalidate>
+                <input type="hidden" id="serviceId">
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="serviceTitle">Title</label>
+                        <input type="text" id="serviceTitle" required>
+                    </div>
+                    <div class="field">
+                        <label for="serviceIcon">Icon <span class="muted">(single symbol)</span></label>
+                        <input type="text" id="serviceIcon" maxlength="3" placeholder="✦">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="serviceDescription">Description</label>
+                    <textarea id="serviceDescription" style="min-height:80px;"></textarea>
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="serviceOrder">Display Order</label>
+                        <input type="number" id="serviceOrder" value="0">
+                    </div>
+                    <div class="field">
+                        <div class="checkbox-row" style="margin-top:30px;">
+                            <input type="checkbox" id="servicePublished">
+                            <label for="servicePublished">Published</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteServiceBtn" style="display:none;">Delete</button>
+                    <span style="flex:1;"></span>
+                    <button type="button" class="btn" data-close-modal="serviceModalOverlay">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveServiceBtn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================= PORTFOLIO CATEGORY EDITOR MODAL ================= -->
+
+    <div class="modal-overlay" id="portfolioModalOverlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 id="portfolioModalTitle">Add Category</h2>
+                <button class="modal-close" data-close-modal="portfolioModalOverlay" type="button">✕</button>
+            </div>
+
+            <div class="alert error" id="portfolioFormAlert"></div>
+
+            <form id="portfolioForm" novalidate>
+                <input type="hidden" id="portfolioCategoryId">
+
+                <div class="field">
+                    <label for="portfolioCategoryName">Name</label>
+                    <input type="text" id="portfolioCategoryName" required placeholder="e.g. Residence, or Bedroom">
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="portfolioCategoryParent">Parent Category <span class="muted">(optional)</span></label>
+                        <select id="portfolioCategoryParent">
+                            <option value="">— Top level —</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="portfolioCategoryOrder">Display Order</label>
+                        <input type="number" id="portfolioCategoryOrder" value="0">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deletePortfolioCategoryBtn" style="display:none;">Delete</button>
+                    <span style="flex:1;"></span>
+                    <button type="button" class="btn" data-close-modal="portfolioModalOverlay">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="savePortfolioCategoryBtn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================= VIDEO EDITOR MODAL ================= -->
+
+    <div class="modal-overlay" id="videoModalOverlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 id="videoModalTitle">Add Video</h2>
+                <button class="modal-close" data-close-modal="videoModalOverlay" type="button">✕</button>
+            </div>
+
+            <div class="alert error" id="videoFormAlert"></div>
+
+            <form id="videoForm" novalidate>
+                <input type="hidden" id="videoId">
+
+                <div class="field">
+                    <label for="videoTitle">Title <span class="muted">(optional)</span></label>
+                    <input type="text" id="videoTitle" placeholder="e.g. Studio Walkthrough — Gulshan Residence">
+                </div>
+
+                <div class="field">
+                    <label for="videoYoutubeUrl">YouTube URL</label>
+                    <input type="text" id="videoYoutubeUrl" required placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX">
+                </div>
+
+                <div class="field">
+                    <label for="videoOrder">Display Order</label>
+                    <input type="number" id="videoOrder" value="0">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteVideoBtn" style="display:none;">Delete</button>
+                    <span style="flex:1;"></span>
+                    <button type="button" class="btn" data-close-modal="videoModalOverlay">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveVideoBtn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================= PROCESS EDITOR MODAL ================= -->
+
+    <div class="modal-overlay" id="processModalOverlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 id="processModalTitle">Add Step</h2>
+                <button class="modal-close" data-close-modal="processModalOverlay" type="button">✕</button>
+            </div>
+
+            <div class="alert error" id="processFormAlert"></div>
+
+            <form id="processForm" novalidate>
+                <input type="hidden" id="processId">
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="processStep">Step Label</label>
+                        <input type="text" id="processStep" placeholder="01">
+                    </div>
+                    <div class="field">
+                        <label for="processTitle">Title</label>
+                        <input type="text" id="processTitle" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="processDescription">Description</label>
+                    <textarea id="processDescription" style="min-height:80px;"></textarea>
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="processOrder">Display Order</label>
+                        <input type="number" id="processOrder" value="0">
+                    </div>
+                    <div class="field">
+                        <div class="checkbox-row" style="margin-top:30px;">
+                            <input type="checkbox" id="processPublished">
+                            <label for="processPublished">Published</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteProcessBtn" style="display:none;">Delete</button>
+                    <span style="flex:1;"></span>
+                    <button type="button" class="btn" data-close-modal="processModalOverlay">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveProcessBtn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================= WHY SK EDITOR MODAL ================= -->
+
+    <div class="modal-overlay" id="whySKModalOverlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 id="whySKModalTitle">Add Item</h2>
+                <button class="modal-close" data-close-modal="whySKModalOverlay" type="button">✕</button>
+            </div>
+
+            <div class="alert error" id="whySKFormAlert"></div>
+
+            <form id="whySKForm" novalidate>
+                <input type="hidden" id="whySKId">
+
+                <div class="field">
+                    <label for="whySKTitle">Title</label>
+                    <input type="text" id="whySKTitle" required>
+                </div>
+
+                <div class="field">
+                    <label for="whySKDescription">Description</label>
+                    <textarea id="whySKDescription" style="min-height:80px;"></textarea>
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="whySKOrder">Display Order</label>
+                        <input type="number" id="whySKOrder" value="0">
+                    </div>
+                    <div class="field">
+                        <div class="checkbox-row" style="margin-top:30px;">
+                            <input type="checkbox" id="whySKPublished">
+                            <label for="whySKPublished">Published</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteWhySKBtn" style="display:none;">Delete</button>
+                    <span style="flex:1;"></span>
+                    <button type="button" class="btn" data-close-modal="whySKModalOverlay">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveWhySKBtn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script src="../js/config.js"></script>
+    <script src="admin.js"></script>
+
+</body>
+</html>

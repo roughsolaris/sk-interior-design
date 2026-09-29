@@ -1,0 +1,1 @@
+var API_BASE_URL = "https://script.google.com/macros/s/AKfycbx5U2r3KuoNwiX0UL3sr35gmjPYg9dKD2u5QA2ATd7IHCWLMOESyggsUwKd1Q6nnG0Q/exec";
