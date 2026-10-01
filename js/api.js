@@ -325,7 +325,18 @@
         return value;
     }
 
+    function viewAllRow(href, label) {
+        return '<div class="view-all-row">' +
+            '<a href="' + href + '" class="button button-outline">' +
+                label +
+                '<span>\u2192</span>' +
+            '</a>' +
+        '</div>';
+    }
+
     window.SKUtils = {
+        viewAllRow: viewAllRow,
+
         fadeInImages: fadeInImages,
         observeReveal: observeReveal,
         staggerChildren: staggerChildren,

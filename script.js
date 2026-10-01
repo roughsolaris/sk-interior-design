@@ -327,10 +327,8 @@ function renderProcessSection() {
             list.innerHTML = published.map(s => `
                 <div class="process-item">
                     <span>${escapeHtml(s.step || "")}</span>
-                    <div>
-                        <h3>${escapeHtml(s.title)}</h3>
-                        <p>${escapeHtml(s.description)}</p>
-                    </div>
+                    <h3>${escapeHtml(s.title)}</h3>
+                    <p>${escapeHtml(s.description)}</p>
                 </div>
             `).join("");
 

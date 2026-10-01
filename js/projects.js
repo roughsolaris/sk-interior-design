@@ -183,8 +183,17 @@ window.SK_FALLBACK_PROJECTS = [
         });
     }
 
+    // Homepage shows a preview (4-per-row \u00d7 2 rows) with a "View All"
+    // link to projects.html once there are more than that \u2014 keeps the
+    // homepage from growing indefinitely as projects are added. The
+    // standalone projects.html page sets data-show-all="true" on the
+    // grid to opt out and show everything.
+    var HOMEPAGE_PROJECT_LIMIT = 8;
+
     function renderProjectGrid() {
         if (!els.projectGrid) return;
+
+        var showAll = els.projectGrid.dataset.showAll === "true";
 
         var list = currentFilteredList();
         state.filteredList = list;
@@ -201,7 +210,9 @@ window.SK_FALLBACK_PROJECTS = [
 
         els.projectGrid.classList.remove("is-empty");
 
-        els.projectGrid.innerHTML = list.map(function (p, i) {
+        var visibleList = showAll ? list : list.slice(0, HOMEPAGE_PROJECT_LIMIT);
+
+        els.projectGrid.innerHTML = visibleList.map(function (p, i) {
             var cover = normalizeImageUrl(p.coverImageUrl || (p.gallery && p.gallery[0]) || "");
             var categoryLabel = displayCategoryLabel(p);
             return (
@@ -220,7 +231,9 @@ window.SK_FALLBACK_PROJECTS = [
                     '</div>' +
                 '</article>'
             );
-        }).join("");
+        }).join("") + (!showAll && list.length > HOMEPAGE_PROJECT_LIMIT
+            ? SKUtils.viewAllRow("projects.html", "View All Projects")
+            : "");
 
         SKUtils.fadeInImages(els.projectGrid);
         SKUtils.staggerChildren(els.projectGrid);
@@ -239,8 +252,12 @@ window.SK_FALLBACK_PROJECTS = [
        the section is hidden entirely (no empty video cards).
     ===================================================== */
 
+    var HOMEPAGE_VIDEO_LIMIT = 6;
+
     function renderVideoSection() {
         if (!els.videoGrid) return;
+
+        var showAll = els.videoGrid.dataset.showAll === "true";
 
         var section = els.videoGrid.closest("section");
         var withVideo = state.allProjects.filter(function (p) { return !!(p.videoUrl && p.videoUrl.trim()); });
@@ -252,7 +269,9 @@ window.SK_FALLBACK_PROJECTS = [
 
         if (section) section.style.display = "";
 
-        els.videoGrid.innerHTML = withVideo.map(function (p) {
+        var visibleVideos = showAll ? withVideo : withVideo.slice(0, HOMEPAGE_VIDEO_LIMIT);
+
+        els.videoGrid.innerHTML = visibleVideos.map(function (p) {
             var cover = normalizeImageUrl(p.coverImageUrl || (p.gallery && p.gallery[0]) || "");
             var embed = embedUrl(p.videoUrl);
             if (!embed) return "";
@@ -269,7 +288,9 @@ window.SK_FALLBACK_PROJECTS = [
                     '</div>' +
                 '</div>'
             );
-        }).join("");
+        }).join("") + (!showAll && withVideo.length > HOMEPAGE_VIDEO_LIMIT
+            ? SKUtils.viewAllRow("projects.html", "View All Projects")
+            : "");
 
         if (!els.videoGrid.innerHTML.trim()) {
             if (section) section.style.display = "none";

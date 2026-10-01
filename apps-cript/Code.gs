@@ -506,14 +506,29 @@ function updateSettings(settings) {
         }
     });
 
+    try { CacheService.getScriptCache().remove(SETTINGS_CACHE_KEY); } catch (e) {}
+
     return sheetToObjects(SHEETS.SETTINGS);
 }
 
+var SETTINGS_CACHE_KEY = "public_settings_v1";
+
 function settingsAsMap() {
+    // Every visitor requests this on page load. Reading the Sheet each
+    // time is the slow part, so the result is cached for a few hours and
+    // cleared the moment the admin saves any setting (see updateSettings).
+    var cache = CacheService.getScriptCache();
+    var hit = cache.get(SETTINGS_CACHE_KEY);
+    if (hit) {
+        try { return JSON.parse(hit); } catch (e) { /* fall through and rebuild */ }
+    }
+
     var map = {};
     sheetToObjects(SHEETS.SETTINGS).forEach(function (row) {
         map[row.key] = row.value;
     });
+
+    try { cache.put(SETTINGS_CACHE_KEY, JSON.stringify(map), 21600); } catch (e) {}
     return map;
 }
 
@@ -600,6 +615,18 @@ function getSheet(name) {
 }
 
 function sheetToObjects(name) {
+    // Every visitor's page load reads several of these sheets, and the
+    // Sheet read itself (not the JSON work) is the slow part. Cache the
+    // parsed rows for a few minutes; any create/update/delete/reorder
+    // clears this immediately (see invalidateSheetCache below), so
+    // admin changes still show up right away.
+    var cache = CacheService.getScriptCache();
+    var cacheKey = "sheet_v1_" + name;
+    var hit = cache.get(cacheKey);
+    if (hit) {
+        try { return JSON.parse(hit); } catch (e) { /* fall through and rebuild */ }
+    }
+
     var sheet = getSheet(name);
     var values = sheet.getDataRange().getValues();
     if (values.length < 2) return [];
@@ -607,7 +634,7 @@ function sheetToObjects(name) {
     var headers = values[0];
     var rows = values.slice(1);
 
-    return rows
+    var result = rows
         .filter(function (row) { return row.join("") !== ""; })
         .map(function (row) {
             var obj = {};
@@ -616,6 +643,14 @@ function sheetToObjects(name) {
             });
             return obj;
         });
+
+    try { cache.put(cacheKey, JSON.stringify(result), 1500); } catch (e) {}
+
+    return result;
+}
+
+function invalidateSheetCache(name) {
+    try { CacheService.getScriptCache().remove("sheet_v1_" + name); } catch (e) {}
 }
 
 function coerceValue(value) {
@@ -628,6 +663,7 @@ function createRow(sheetName, obj) {
     var sheet = getSheet(sheetName);
     var headers = SHEET_HEADERS[sheetName];
     appendRowRaw(sheet, headers, obj);
+    invalidateSheetCache(sheetName);
     return obj;
 }
 
@@ -658,6 +694,7 @@ function updateRowByColumn(sheet, matchColumn, matchValue, updates, sheetNameFor
             headers.forEach(function (h, c) {
                 updated[h] = updates[h] !== undefined ? updates[h] : data[r][c];
             });
+            invalidateSheetCache(sheet.getName());
             return updated;
         }
     }
@@ -674,6 +711,7 @@ function deleteRowById(sheetName, id) {
     for (var r = 1; r < data.length; r++) {
         if (String(data[r][colIndex]) === String(id)) {
             sheet.deleteRow(r + 1);
+            invalidateSheetCache(sheetName);
             return { deleted: true, id: id };
         }
     }

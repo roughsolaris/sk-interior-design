@@ -266,12 +266,16 @@
 
                 section.style.display = "";
 
+                var showAll = grid.dataset.showAll === "true";
+                var HOMEPAGE_VIDEO_GALLERY_LIMIT = 6;
+                var visible = showAll ? valid : valid.slice(0, HOMEPAGE_VIDEO_GALLERY_LIMIT);
+
                 // Reuses the same .video-card / .video-frame / .video-play
                 // markup and styling as the project videos in
                 // js/projects.js, so both video sections look identical —
                 // this one is just fed by the standalone Videos sheet
                 // instead of project data.
-                grid.innerHTML = valid.map(function (v) {
+                grid.innerHTML = visible.map(function (v) {
                     var thumb = "https://img.youtube.com/vi/" + v.youtubeId + "/hqdefault.jpg";
                     return '<div class="video-card" data-embed="https://www.youtube.com/embed/' + v.youtubeId + '?autoplay=1&rel=0" data-title="' + escapeHtml(v.title || "Video") + '">' +
                         '<div class="video-frame">' +
@@ -280,7 +284,9 @@
                         '</div>' +
                         (v.title ? '<div class="video-caption"><h3>' + escapeHtml(v.title) + '</h3></div>' : "") +
                     '</div>';
-                }).join("");
+                }).join("") + (!showAll && valid.length > HOMEPAGE_VIDEO_GALLERY_LIMIT
+                    ? window.SKUtils.viewAllRow("videos.html", "View All Videos")
+                    : "");
 
                 grid.querySelectorAll(".video-card").forEach(function (card) {
                     card.addEventListener("click", function () {
